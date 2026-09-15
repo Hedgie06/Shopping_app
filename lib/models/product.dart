@@ -1,4 +1,3 @@
-
 class Product {
   final int id;
   final double price;
@@ -19,20 +18,23 @@ class Product {
     required this.rating,
     required this.brand,
     required this.shippingInformation,
-    required this.thumbnail
+    required this.thumbnail,
   });
 
-   factory Product.fromJson(Map<String, dynamic> json) {
+  factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      id: json['id'], 
+      id: json['id'],
       price: (json['price'] as num).toDouble(),
       title: json['title'],
-      category: json['category'], 
+      category: json['category'],
       discountPercentage: (json['discountPercentage'] as num).toDouble(),
       rating: (json['rating'] as num).toDouble(),
       brand: json['brand'] ?? '',
       shippingInformation: json['shippingInformation'] ?? '',
       thumbnail: json['thumbnail'] ?? 'image not supported',
     );
-   }
+  }
+  double get discountedPrice {
+    return price - (price * discountPercentage / 100);
+  }
 }
