@@ -35,35 +35,35 @@ class _ProductListScreenState extends State<ProductListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Stack(children: [
+        title: Stack(
+          children: [
             Text(
-            'Shopping App',
-            style: GoogleFonts.poppins(
-              fontSize: 35,
-              fontWeight: FontWeight.bold,
-              foreground: Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 3
-              ..color = Colors.white,
-            ),  
+              'Shopping App',
+              style: GoogleFonts.poppins(
+                fontSize: 35,
+                fontWeight: FontWeight.bold,
+                foreground: Paint()
+                  ..style = PaintingStyle.stroke
+                  ..strokeWidth = 3
+                  ..color = Colors.white,
+              ),
             ),
             Text(
-            'Shopping App',
-            style: GoogleFonts.poppins(
-              color: Colors.black,
-              fontSize: 35,
-              fontWeight: FontWeight.bold
-            ),  
+              'Shopping App',
+              style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontSize: 35,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ],) ,
-          backgroundColor: Colors.black,
-          centerTitle: true,
+          ],
         ),
+        backgroundColor: Colors.black,
+        centerTitle: true,
+      ),
 
       body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
+          ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: products.length,
               itemBuilder: (context, index) {
@@ -71,10 +71,27 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
                 return ListTile(
                   title: Text(product.title),
-                  subtitle: Text('\$${product.price}'),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(product.brand),
+                      Text(product.category),
+                      Text('\$${product.price}'),
+                      Text('${product.discountPercentage}%'), 
+                      Text('${product.rating}'),
+                      Text(product.shippingInformation),
+                    ],
+                  ),
                 );
+                /*return ListTile(
+                  title: Text(product.title),
+                  subtitle: Text(
+                    '\$${product.price} ${product.category}'
+                    ),
+                );*/
               },
             ),
+      backgroundColor: Colors.white,
     );
   }
 }
