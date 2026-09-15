@@ -13,7 +13,7 @@ class ProductListScreen extends StatefulWidget {
 
 class _ProductListScreenState extends State<ProductListScreen> {
   final ProductService _productService = ProductService();
-
+  final TextEditingController searchController = TextEditingController();
   List<Product> products = [];
   bool isLoading = true;
 
@@ -31,6 +31,24 @@ class _ProductListScreenState extends State<ProductListScreen> {
       isLoading = false;
     });
   }
+  Future<void> searchProducts(String query) async {
+  setState(() {
+    isLoading = true;
+  });
+
+  try {
+    final results = await ProductService().searchProducts(query);
+
+    setState(() {
+      products = results;
+      isLoading = false;
+    });
+  } catch (e) {
+    setState(() {
+      isLoading = false;
+    });
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +88,16 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 Padding(
                   padding: const EdgeInsets.all(12),
                   child: TextField(
+                    controller: searchController,
+                    onSubmitted: (query) {
+                      searchProducts(query);
+                    },
                     decoration: InputDecoration(
                       hintText: 'Search products..',
-                      hintStyle: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600),
+                      hintStyle: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
                       prefixIcon: Icon(Icons.search),
                       filled: true,
                       fillColor: Colors.white,
