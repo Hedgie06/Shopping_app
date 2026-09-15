@@ -65,7 +65,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
+          : GridView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 1,
+                mainAxisSpacing: 1,
+                childAspectRatio: 0.55,
+              ),
               itemCount: products.length,
               itemBuilder: (context, index) {
                 final product = products[index];

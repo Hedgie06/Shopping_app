@@ -29,6 +29,8 @@ class ProductCard extends StatelessWidget {
             ),
             Text(
               product.title,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
               style: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -36,6 +38,8 @@ class ProductCard extends StatelessWidget {
             ),
             Text(
               product.brand,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
               style: GoogleFonts.poppins(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -43,6 +47,8 @@ class ProductCard extends StatelessWidget {
             ),
             Text(
               product.category,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
               style: GoogleFonts.poppins(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -50,6 +56,8 @@ class ProductCard extends StatelessWidget {
             ),
             Text(
               '\$${product.price}',
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
               style: GoogleFonts.poppins(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -57,6 +65,8 @@ class ProductCard extends StatelessWidget {
             ),
             Text(
               '${product.discountPercentage}%',
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
               style: GoogleFonts.poppins(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -64,6 +74,8 @@ class ProductCard extends StatelessWidget {
             ),
             Text(
               '${product.rating}',
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
               style: GoogleFonts.poppins(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -71,6 +83,8 @@ class ProductCard extends StatelessWidget {
             ),
             Text(
               product.shippingInformation,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
               style: GoogleFonts.poppins(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
