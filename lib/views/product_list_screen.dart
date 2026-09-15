@@ -70,18 +70,27 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 final product = products[index];
 
                 return ListTile(
-                  title: Text(product.title),
+                  title: Text(product.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(product.brand),
                       Text(product.category),
                       Text('\$${product.price}'),
-                      Text('${product.discountPercentage}%'), 
+                      Text('${product.discountPercentage}%'),
                       Text('${product.rating}'),
                       Text(product.shippingInformation),
                     ],
                   ),
+                  trailing: Image.network(
+                        product.thumbnail,
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(Icons.image_not_supported);
+                        },
+                      ),
                 );
                 /*return ListTile(
                   title: Text(product.title),
