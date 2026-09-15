@@ -71,15 +71,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 final product = products[index];
 
                 return ProductCard(product: product);
-                /*return ListTile(
-                  title: Text(product.title),
-                  subtitle: Text(
-                    '\$${product.price} ${product.category}'
-                    ),
-                );*/
               },
             ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[200],
     );
   }
 }
