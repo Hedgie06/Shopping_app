@@ -65,20 +65,42 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : GridView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 1,
-                mainAxisSpacing: 1,
-                childAspectRatio: 0.6,
-              ),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final product = products[index];
+          : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Search products..',
+                      hintStyle: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600),
+                      prefixIcon: Icon(Icons.search),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: GridView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 1,
+                          mainAxisSpacing: 1,
+                          childAspectRatio: 0.6,
+                        ),
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      final product = products[index];
 
-                return ProductCard(product: product);
-              },
+                      return ProductCard(product: product);
+                    },
+                  ),
+                ),
+              ],
             ),
       backgroundColor: Colors.grey[200],
     );
