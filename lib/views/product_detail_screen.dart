@@ -240,7 +240,71 @@ class ProductDetailScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            top: BorderSide(color: Colors.grey.shade300, width: 1),
+          ),
+        ),
+        child: SafeArea(
+          child: Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    // TODO: implement the add to cart logic
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                    elevation: 0,
+                    side: const BorderSide(color: Colors.black, width: 1.5),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  child: Text(
+                    'Add to Cart',
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    // TODO: Implement buy now logic
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  child: Text(
+                    'Buy Now',
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
+
     throw UnimplementedError();
   }
 }
