@@ -87,6 +87,31 @@ class ProductDetailScreen extends StatelessWidget {
                 ),
               ),
             Text(product.brand),
+             Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    '\$${product.discountedPrice.toStringAsFixed(2)}',
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.poppins(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(),
+                  Text(
+                    '\$${product.price.toStringAsFixed(2)}',
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      decoration: TextDecoration.lineThrough,
+                    ),
+                  ),
+                  
+                ],
+              ),
+              
             Text(
                 product.description,
                 style: GoogleFonts.poppins(
