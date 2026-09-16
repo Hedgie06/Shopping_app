@@ -4,9 +4,9 @@ import '../views/product_detail_screen.dart';
 import '../models/product.dart';
 
 class ProductService {
-  Future<List<Product>> fetchProducts() async {
+  Future<List<Product>> fetchProducts({int skip = 0, int limit = 20}) async {
     final response = await http.get(
-      Uri.parse('https://dummyjson.com/products?limit=20&skip=0'),
+      Uri.parse('https://dummyjson.com/products?limit=$limit&skip=$skip'),
     );
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);

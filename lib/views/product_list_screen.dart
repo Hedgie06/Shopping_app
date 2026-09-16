@@ -14,41 +14,97 @@ class ProductListScreen extends StatefulWidget {
 class _ProductListScreenState extends State<ProductListScreen> {
   final ProductService _productService = ProductService();
   final TextEditingController searchController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   List<Product> products = [];
   bool isLoading = true;
+  bool _isLoadingMore = false;
+  bool _hasMore = true;
+  bool _isSearching = false;
+  int _skip = 0;
+  final int _limit = 20;
 
   @override
   void initState() {
     super.initState();
     loadProducts();
+    _scrollController.addListener(_onScroll);
   }
 
-  Future<void> loadProducts() async {
-    final result = await _productService.fetchProducts();
-
-    setState(() {
-      products = result;
-      isLoading = false;
-    });
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    searchController.dispose();
+    super.dispose();
   }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      if (!_isLoadingMore && _hasMore && !_isSearching) {
+        loadProducts(isLoadMore: true);
+      }
+    }
+  }
+
+  Future<void> loadProducts({bool isLoadMore = false}) async {
+    if (isLoadMore) {
+      setState(() => _isLoadingMore = true);
+    } else {
+      setState(() => isLoading = true);
+    }
+
+    try {
+      final result = await _productService.fetchProducts(skip: _skip, limit: _limit);
+
+      setState(() {
+        if (result.length < _limit) {
+          _hasMore = false; 
+        }
+        _skip += _limit;
+
+        if (isLoadMore) {
+          products.addAll(result);
+        } else {
+          products = result;
+        }
+        
+        isLoading = false;
+        _isLoadingMore = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        _isLoadingMore = false;
+      });
+    }
+  }
+
   Future<void> searchProducts(String query) async {
-  setState(() {
-    isLoading = true;
-  });
-
-  try {
-    final results = await ProductService().searchProducts(query);
+    if (query.isEmpty) {
+      _isSearching = false;
+      _skip = 0;
+      _hasMore = true;
+      loadProducts();
+      return;
+    }
 
     setState(() {
-      products = results;
-      isLoading = false;
+      _isSearching = true;
+      isLoading = true;
     });
-  } catch (e) {
-    setState(() {
-      isLoading = false;
-    });
+
+    try {
+      final results = await ProductService().searchProducts(query);
+
+      setState(() {
+        products = results;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +136,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
         backgroundColor: Colors.black,
         centerTitle: true,
       ),
-
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Column(
@@ -98,7 +153,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: const Icon(Icons.search),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -109,22 +164,27 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 ),
                 Expanded(
                   child: GridView.builder(
+                    controller: _scrollController, 
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 1,
-                          mainAxisSpacing: 1,
-                          childAspectRatio: 0.6,
-                        ),
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 1,
+                      mainAxisSpacing: 1,
+                      childAspectRatio: 0.6,
+                    ),
                     itemCount: products.length,
                     itemBuilder: (context, index) {
                       final product = products[index];
-
                       return ProductCard(product: product);
                     },
                   ),
                 ),
+                if (_isLoadingMore)
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: CircularProgressIndicator(color: Colors.black),
+                  ),
               ],
             ),
       backgroundColor: Colors.grey[200],
