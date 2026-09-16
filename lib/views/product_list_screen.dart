@@ -76,9 +76,33 @@ class _ProductListScreenState extends State<ProductListScreen> {
         _isLoadingMore = false;
       });
     }
+    if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: Colors.white,
+            title: const Row(
+              children: [
+                Icon(Icons.error_outline, color: Colors.redAccent),
+                SizedBox(width: 8),
+                Text('Request Failed'),
+              ],
+            ),
+            content: const Text(
+              'Network request failed. Please check your connection and try again.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK', style: TextStyle(color: Colors.black)),
+              ),
+            ],
+          ),
+        );
+      }
   }
 
-  Future<void> searchProducts(String query) async {
+Future<void> searchProducts(String query) async {
     if (query.isEmpty) {
       _isSearching = false;
       _skip = 0;
@@ -93,7 +117,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     });
 
     try {
-      final results = await ProductService().searchProducts(query);
+      final results = await _productService.searchProducts(query);
 
       setState(() {
         products = results;
@@ -101,8 +125,34 @@ class _ProductListScreenState extends State<ProductListScreen> {
       });
     } catch (e) {
       setState(() {
+        products = [];
         isLoading = false;
       });
+
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: Colors.white,
+            title: const Row(
+              children: [
+                Icon(Icons.error_outline, color: Colors.redAccent),
+                SizedBox(width: 8),
+                Text('Request Failed'),
+              ],
+            ),
+            content: const Text(
+              'Network request failed. Please check your connection and try again.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK', style: TextStyle(color: Colors.black)),
+              ),
+            ],
+          ),
+        );
+      }
     }
   }
 
