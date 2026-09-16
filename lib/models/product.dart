@@ -1,3 +1,5 @@
+import 'package:shopping_app1/models/review.dart';
+
 class Product {
   final int id;
   final double price;
@@ -10,6 +12,7 @@ class Product {
   final String thumbnail;
   final List<String> images;
   final String description;
+  final List<Review> reviews;
 
   Product({
     required this.id,
@@ -22,7 +25,8 @@ class Product {
     required this.shippingInformation,
     required this.thumbnail,
     required this.images,
-    required this.description
+    required this.description,
+    required this.reviews,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -36,8 +40,17 @@ class Product {
       brand: json['brand'] ?? '',
       shippingInformation: json['shippingInformation'] ?? '',
       thumbnail: json['thumbnail'] ?? 'image not supported',
-      images: (json['images'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      images:
+          (json['images'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
       description: json['description'] ?? 'No description',
+      reviews:
+          (json['reviews'] as List<dynamic>?)
+              ?.map((e) => Review.fromJson(e))
+              .toList() ??
+          [],
     );
   }
   double get discountedPrice {
