@@ -138,18 +138,7 @@ class ProductCard extends StatelessWidget {
                 ],
               ),
             ],
-          ),
-          /*trailing: Center(
-        child: Image.network(
-          product.thumbnail,
-          width: 70,
-          height: 56,
-          fit: BoxFit.contain,
-          errorBuilder: (context, error, stackTrace) {
-            return const Icon(Icons.image_not_supported, size: 40,);
-          },
-        ),
-      ),*/
+          )
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app1/models/product.dart';
+import 'package:shopping_app1/models/review.dart';
 import '../services/product_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -145,34 +146,95 @@ class ProductDetailScreen extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             Row(
-                children: [
-                  Icon(
-                    Icons.local_shipping_outlined,
-                    size: 14,
-                    color: Colors.green,
-                  ),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: Text(
-                      product.shippingInformation,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
+              children: [
+                Icon(
+                  Icons.local_shipping_outlined,
+                  size: 14,
+                  color: Colors.green,
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    product.shippingInformation,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                ],
-              ),
-              SizedBox(height: 10),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
             Text(
               product.description,
               style: GoogleFonts.poppins(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: 10),
+
+            Text(
+              'Reviews',
+              style: GoogleFonts.poppins(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            SizedBox(
+              height: 150,
+              child: ListView.builder(
+                itemCount: product.reviews.length,
+                itemBuilder: (context, index) {
+                  final review = product.reviews[index];
+
+                  return Card(
+                    color: Colors.white,
+                    margin: const EdgeInsets.only(bottom: 12),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            review.reviewerName,
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+
+                          const SizedBox(height: 4),
+
+                          Row(
+                            children: List.generate(
+                              5,
+                              (starIndex) => Icon(
+                                starIndex < review.rating
+                                    ? Icons.star
+                                    : Icons.star_border,
+                                size: 16,
+                                color: Colors.orangeAccent,
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 6),
+
+                          Text(
+                            review.comment,
+                            style: GoogleFonts.poppins(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],
