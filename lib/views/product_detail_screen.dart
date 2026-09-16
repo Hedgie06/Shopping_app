@@ -49,9 +49,36 @@ class ProductDetailScreen extends StatelessWidget {
           icon: Icon(Icons.arrow_back_sharp, color: Colors.white),
         ),
       ),
+
       body: Padding(
         padding: EdgeInsets.all(16),
-        child: Column(children: [Text(product.title), Text(product.brand)]),
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: product.images.isNotEmpty
+                  ? Image.network(
+                      product
+                          .images
+                          .first, 
+                      width: 300,
+                      height: 300,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(Icons.image_not_supported, size: 40);
+                      },
+                    )
+                  : const SizedBox(
+                      width: 300,
+                      height: 300,
+                      child: Icon(Icons.image_not_supported, size: 40),
+                    ),
+            ),
+            Text(product.title),
+            Text(product.brand),
+          ],
+        ),
       ),
     );
     throw UnimplementedError();

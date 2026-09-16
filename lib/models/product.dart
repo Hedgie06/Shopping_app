@@ -8,6 +8,7 @@ class Product {
   final String brand;
   final String shippingInformation;
   final String thumbnail;
+  final List<String> images;
 
   Product({
     required this.id,
@@ -19,6 +20,7 @@ class Product {
     required this.brand,
     required this.shippingInformation,
     required this.thumbnail,
+    required this.images,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class Product {
       brand: json['brand'] ?? '',
       shippingInformation: json['shippingInformation'] ?? '',
       thumbnail: json['thumbnail'] ?? 'image not supported',
+      images: (json['images'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
     );
   }
   double get discountedPrice {
