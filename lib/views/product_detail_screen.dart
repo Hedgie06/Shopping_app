@@ -77,22 +77,23 @@ class ProductDetailScreen extends StatelessWidget {
                     )
                   : const Icon(Icons.image_not_supported, size: 40),
             ),
-            /*Center(
-              child: product.images.isNotEmpty
-                  ? Image.network(
-                      product.images.first,
-                      width: 300,
-                      height: 300,
-                      fit: BoxFit.contain,
-                    )
-                  : const SizedBox(
-                      width: 300,
-                      height: 300,
-                      child: Icon(Icons.image_not_supported, size: 40),
-                    ),
-            ),*/
-            Text(product.title),
+               Text(
+                product.title,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             Text(product.brand),
+            Text(
+                product.description,
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
           ],
         ),
       ),
