@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../views/product_detail_screen.dart';
 import '../models/product.dart';
 
 class ProductService {
@@ -32,5 +33,18 @@ class ProductService {
     }
 
     throw Exception('Failed to search products');
+  }
+
+  Future <Product> fetchProductByID(int id) async {
+    final response = await http.get(
+      Uri.parse('https://dummyjson.com/products/$id'),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      return Product.fromJson(data);
+    }
+    throw Exception('Failed to load product detail');
   }
 }
