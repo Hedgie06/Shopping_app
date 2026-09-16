@@ -57,7 +57,7 @@ class ProductDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 300, 
+              height: 300,
               width: double.infinity,
               child: product.images.isNotEmpty
                   ? PageView.builder(
@@ -77,48 +77,104 @@ class ProductDetailScreen extends StatelessWidget {
                     )
                   : const Icon(Icons.image_not_supported, size: 40),
             ),
-               Text(
-                product.title,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: GoogleFonts.poppins(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+            Text(
+              product.title,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
-            Text(product.brand),
-             Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(product.brand),
+                Row(
+                  children: [
+                    Icon(Icons.star, size: 15, color: Colors.orangeAccent),
+                    Text(
+                      '${product.rating}',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      '\$${product.discountedPrice.toStringAsFixed(2)}',
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(),
+                    Text(
+                      '\$${product.price.toStringAsFixed(2)}',
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        decoration: TextDecoration.lineThrough,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      '${product.discountPercentage}% OFF',
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            
+            Row(
                 children: [
-                  Text(
-                    '\$${product.discountedPrice.toStringAsFixed(2)}',
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.poppins(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                  Icon(
+                    Icons.local_shipping_outlined,
+                    size: 14,
+                    color: Colors.green,
+                  ),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: Text(
+                      product.shippingInformation,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                  const SizedBox(),
-                  Text(
-                    '\$${product.price.toStringAsFixed(2)}',
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
-                      decoration: TextDecoration.lineThrough,
-                    ),
-                  ),
-                  
                 ],
               ),
-              
+              SizedBox(height: 10),
             Text(
-                product.description,
-                style: GoogleFonts.poppins(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
+              product.description,
+              style: GoogleFonts.poppins(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
               ),
+            ),
           ],
         ),
       ),
