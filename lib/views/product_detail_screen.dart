@@ -56,25 +56,41 @@ class ProductDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
+            SizedBox(
+              height: 300, 
+              width: double.infinity,
+              child: product.images.isNotEmpty
+                  ? PageView.builder(
+                      itemCount: product.images.length,
+                      itemBuilder: (context, index) {
+                        return Image.network(
+                          product.images[index],
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(
+                              Icons.image_not_supported,
+                              size: 40,
+                            );
+                          },
+                        );
+                      },
+                    )
+                  : const Icon(Icons.image_not_supported, size: 40),
+            ),
+            /*Center(
               child: product.images.isNotEmpty
                   ? Image.network(
-                      product
-                          .images
-                          .first, 
+                      product.images.first,
                       width: 300,
                       height: 300,
                       fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.image_not_supported, size: 40);
-                      },
                     )
                   : const SizedBox(
                       width: 300,
                       height: 300,
                       child: Icon(Icons.image_not_supported, size: 40),
                     ),
-            ),
+            ),*/
             Text(product.title),
             Text(product.brand),
           ],
