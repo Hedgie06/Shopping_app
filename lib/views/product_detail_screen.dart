@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app1/models/product.dart';
 import '../services/product_service.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final Product product;
@@ -14,7 +15,40 @@ class ProductDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Product Details')),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        centerTitle: true,
+        title: Stack(
+          children: [
+            Text(
+              'Shopping App',
+              style: GoogleFonts.poppins(
+                fontSize: 35,
+                fontWeight: FontWeight.bold,
+                foreground: Paint()
+                  ..style = PaintingStyle.stroke
+                  ..strokeWidth = 3
+                  ..color = Colors.white,
+              ),
+            ),
+            Text(
+              'Shopping App',
+              style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontSize: 35,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_sharp, color: Colors.white),
+        ),
+      ),
       body: Padding(
         padding: EdgeInsets.all(16),
         child: Column(children: [Text(product.title), Text(product.brand)]),
