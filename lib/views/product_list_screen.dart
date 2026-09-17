@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:async';
 import '../models/product.dart';
 import '../services/product_service.dart';
 import '../widgets/product_card.dart';
@@ -15,6 +16,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
   final ProductService _productService = ProductService();
   final TextEditingController searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  Timer? _debounce;
   List<Product> products = [];
   bool isLoading = true;
   bool _isLoadingMore = false;
@@ -32,13 +34,15 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _scrollController.dispose();
     searchController.dispose();
     super.dispose();
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       if (!_isLoadingMore && _hasMore && !_isSearching) {
         loadProducts(isLoadMore: true);
       }
@@ -53,11 +57,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
     }
 
     try {
-      final result = await _productService.fetchProducts(skip: _skip, limit: _limit);
+      final result = await _productService.fetchProducts(
+        skip: _skip,
+        limit: _limit,
+      );
 
       setState(() {
         if (result.length < _limit) {
-          _hasMore = false; 
+          _hasMore = false;
         }
         _skip += _limit;
 
@@ -66,7 +73,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         } else {
           products = result;
         }
-        
+
         isLoading = false;
         _isLoadingMore = false;
       });
@@ -76,33 +83,34 @@ class _ProductListScreenState extends State<ProductListScreen> {
         _isLoadingMore = false;
       });
     }
-    if (mounted) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            backgroundColor: Colors.white,
-            title: const Row(
-              children: [
-                Icon(Icons.error_outline, color: Colors.redAccent),
-                SizedBox(width: 8),
-                Text('Request Failed'),
-              ],
-            ),
-            content: const Text(
-              'Network request failed. Please check your connection and try again.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('OK', style: TextStyle(color: Colors.black)),
-              ),
-            ],
-          ),
-        );
-      }
+    // TODO: Reenable network connectivity listener after resolving emulator connectivity detection issue
+    // if (mounted) {
+    //   showDialog(
+    //     context: context,
+    //     builder: (context) => AlertDialog(
+    //       backgroundColor: Colors.white,
+    //       title: const Row(
+    //         children: [
+    //           Icon(Icons.error_outline, color: Colors.redAccent),
+    //           SizedBox(width: 8),
+    //           Text('Request Failed'),
+    //         ],
+    //       ),
+    //       content: const Text(
+    //         'Network request failed. Please check your connection and try again.',
+    //       ),
+    //       actions: [
+    //         TextButton(
+    //           onPressed: () => Navigator.pop(context),
+    //           child: const Text('OK', style: TextStyle(color: Colors.black)),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
   }
 
-Future<void> searchProducts(String query) async {
+  Future<void> searchProducts(String query) async {
     if (query.isEmpty) {
       _isSearching = false;
       _skip = 0;
@@ -129,30 +137,31 @@ Future<void> searchProducts(String query) async {
         isLoading = false;
       });
 
-      if (mounted) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            backgroundColor: Colors.white,
-            title: const Row(
-              children: [
-                Icon(Icons.error_outline, color: Colors.redAccent),
-                SizedBox(width: 8),
-                Text('Request Failed'),
-              ],
-            ),
-            content: const Text(
-              'Network request failed. Please check your connection and try again.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('OK', style: TextStyle(color: Colors.black)),
-              ),
-            ],
-          ),
-        );
-      }
+      // TODO: Reenable network connectivity listener after resolving emulator connectivity detection issue
+      // if (mounted) {
+      //   showDialog(
+      //     context: context,
+      //     builder: (context) => AlertDialog(
+      //       backgroundColor: Colors.white,
+      //       title: const Row(
+      //         children: [
+      //           Icon(Icons.error_outline, color: Colors.redAccent),
+      //           SizedBox(width: 8),
+      //           Text('Request Failed'),
+      //         ],
+      //       ),
+      //       content: const Text(
+      //         'Network request failed. Please check your connection and try again.',
+      //       ),
+      //       actions: [
+      //         TextButton(
+      //           onPressed: () => Navigator.pop(context),
+      //           child: const Text('OK', style: TextStyle(color: Colors.black)),
+      //         ),
+      //       ],
+      //     ),
+      //   );
+      // }
     }
   }
 
@@ -194,8 +203,12 @@ Future<void> searchProducts(String query) async {
                   padding: const EdgeInsets.all(12),
                   child: TextField(
                     controller: searchController,
-                    onSubmitted: (query) {
-                      searchProducts(query);
+                    onChanged: (query) {
+                      if (_debounce?.isActive ?? false) _debounce!.cancel();
+
+                      _debounce = Timer(const Duration(milliseconds: 500), () {
+                        searchProducts(query.trim());
+                      });
                     },
                     decoration: InputDecoration(
                       hintText: 'Search products..',
@@ -213,22 +226,44 @@ Future<void> searchProducts(String query) async {
                   ),
                 ),
                 Expanded(
-                  child: GridView.builder(
-                    controller: _scrollController, 
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 1,
-                      mainAxisSpacing: 1,
-                      childAspectRatio: 0.6,
-                    ),
-                    itemCount: products.length,
-                    itemBuilder: (context, index) {
-                      final product = products[index];
-                      return ProductCard(product: product);
-                    },
-                  ),
+                  child: products.isEmpty && !isLoading
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.search_off,
+                                size: 64,
+                                color: Colors.grey,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'No products found.',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : GridView.builder(
+                          controller: _scrollController,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 1,
+                                mainAxisSpacing: 1,
+                                childAspectRatio: 0.6,
+                              ),
+                          itemCount: products.length,
+                          itemBuilder: (context, index) {
+                            final product = products[index];
+                            return ProductCard(product: product);
+                          },
+                        ),
                 ),
                 if (_isLoadingMore)
                   const Padding(

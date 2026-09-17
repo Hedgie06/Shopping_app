@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app1/services/network_service.dart';
 import 'views/product_list_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  NetworkService.listen(navigatorKey);
+  // TODO: Reenable network connectivity listener after resolving emulator connectivity detection issue
+  //NetworkService.listen(navigatorKey);
   runApp(const MyApp());
 }
 

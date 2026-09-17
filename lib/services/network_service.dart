@@ -2,19 +2,17 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 
 class NetworkService {
-  // 1. State variable MUST be static to be accessed by a static method
+
   static bool _isDialogShowing = false;
 
-  // 2. The static listener called directly from main.dart
   static void listen(GlobalKey<NavigatorState> navKey) {
     
     Connectivity().onConnectivityChanged.listen((dynamic event) {
       final context = navKey.currentContext;
       
-      // Abort if the widget tree hasn't painted yet
+
       if (context == null) return;
 
-      // 3. Bulletproof check for package version differences
       final bool isOffline = event is List 
           ? event.contains(ConnectivityResult.none) 
           : event == ConnectivityResult.none;
@@ -24,7 +22,7 @@ class NetworkService {
         
         showDialog(
           context: context,
-          barrierDismissible: false, // Forces user to restore connection
+          barrierDismissible: false, 
           builder: (_) => const AlertDialog(
             title: Row(
               children: [
@@ -39,7 +37,6 @@ class NetworkService {
           ),
         );
       } else if (!isOffline && _isDialogShowing) {
-        // Dismiss the dialog automatically when connection restores
         Navigator.pop(context);
         _isDialogShowing = false;
       }

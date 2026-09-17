@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app1/models/product.dart';
-import 'package:shopping_app1/models/review.dart';
-import '../services/product_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProductDetailScreen extends StatelessWidget {
